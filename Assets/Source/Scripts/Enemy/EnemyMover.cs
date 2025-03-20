@@ -14,6 +14,7 @@ public class EnemyMover : MonoBehaviour
     private EnemyAnimationController _animator;
     private int _currentWaypoint;
     private bool _canMove = true;
+    private float _distanceToWaypoint;
 
     private void Awake()
     {
@@ -47,15 +48,18 @@ public class EnemyMover : MonoBehaviour
         _animator.StopChaseAnimation();
         _animator.RestartWalkAnimation();
         
-        float distanceToWaypoint = Vector2.Distance(transform.position,
+       _distanceToWaypoint = Vector2.Distance(transform.position,
             _waypoints.WaypointsArray[_currentWaypoint].position);
 
-        if (distanceToWaypoint < _accuracyValue)
+        if (_distanceToWaypoint < _accuracyValue)
         {
             _canMove = false;
             Invoke(nameof(CanMove), _pauseTime);
+            
             _animator.StopWalkAnimation();
+            
             _currentWaypoint = ++_currentWaypoint % _waypoints.WaypointsArray.Length;
+            
             return;
         }
 

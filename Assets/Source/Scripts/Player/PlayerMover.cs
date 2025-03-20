@@ -7,14 +7,12 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float _moveSpeed;
 
     private Rigidbody2D _rigidbody;
-    private Animator _animator;
     private InputReader _inputReader;
     private PlayerAnimationController _playerAnimationController;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
         _inputReader = GetComponent<InputReader>();
         _playerAnimationController = GetComponent<PlayerAnimationController>();
     }
