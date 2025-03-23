@@ -1,36 +1,35 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(InputReader),typeof(PlayerAnimationController))]
 public class PlayerAttacker : MonoBehaviour
 {
     [SerializeField] private float _attackRange = 0.5f;
     [SerializeField] private int _attackDamage = 20;
-
-    private PlayerAnimationController _animator;
-    private InputReader _inputReader;
+    [SerializeField] private float _attackDelay = 0.1f;
+   
+    private WaitForSeconds _waitForSeconds;
     private List<Enemy> _hitEnemies;
     private List<Collider2D> _hit;
+    private bool _isAttackDelayOver;
 
+    public event Action OnAttacking;
+    
     private void Awake()
     {
-        _inputReader = GetComponent<InputReader>();
-        _animator = GetComponent<PlayerAnimationController>();
+        _waitForSeconds = new WaitForSeconds(_attackDelay);
+        _isAttackDelayOver = true;
     }
 
-    private void Update()
+    public void Attack()
     {
-        if (_inputReader.OnMouseButtonPressed)
-        {
-            Attack();
-        }
-    }
+        if (_isAttackDelayOver == false)
+            return;
 
-    private void Attack()
-    {
-        _animator.Attack();
-
+        OnAttacking?.Invoke();
+        
         _hit = Physics2D.OverlapCircleAll(transform.position, _attackRange).ToList();
         _hitEnemies = new List<Enemy>();
         
@@ -46,10 +45,19 @@ public class PlayerAttacker : MonoBehaviour
         {
             enemy.TakeDamage(DealDamage());
         }
+
+        StartCoroutine(WaitForNextAttack());
     }
 
     private int DealDamage()
     {
         return _attackDamage;
+    }
+    
+    private IEnumerator WaitForNextAttack()
+    {
+        _isAttackDelayOver = false;
+        yield return _waitForSeconds;
+        _isAttackDelayOver = true;
     }
 }

@@ -1,81 +1,29 @@
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyAnimationController))]
+[RequireComponent(typeof(Flipper))]
 public class EnemyMover : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer _enemySprite;
-    [SerializeField] private PlayerSearcher _playerSearcher;
-    [SerializeField] private Waypoints _waypoints;
-    [SerializeField] private float _pauseTime;
-    [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _chaseSpeed;
-    [SerializeField] private float _accuracyValue = 0.1f;
-
-    private EnemyAnimationController _animator;
-    private int _currentWaypoint;
-    private bool _canMove = true;
-    private float _distanceToWaypoint;
+    private Flipper _flipper;
+    private Vector3 _direction;
 
     private void Awake()
     {
-        _animator = GetComponent<EnemyAnimationController>();
+        _flipper = GetComponent<Flipper>();
     }
 
-    private void Update()
+    public void MoveTo(Vector3 target, float speed)
     {
-        if (_playerSearcher.FindedPlayer != null)
-        {
-            Chase();
-        }
-        else
-        {
-            Patrol();
-        }
-    }
+        FlipTowardsTarget(target);
 
-    private void Chase()
-    {
-        _animator.StopWalkAnimation();
-        _animator.RestartChaseAnimation();
-        MoveTo(_playerSearcher.FindedPlayer.transform.position, _chaseSpeed);
-    }
-
-    private void Patrol()
-    {
-        if (_canMove == false)
-            return;
-
-        _animator.StopChaseAnimation();
-        _animator.RestartWalkAnimation();
-        
-       _distanceToWaypoint = Vector2.Distance(transform.position,
-            _waypoints.WaypointsArray[_currentWaypoint].position);
-
-        if (_distanceToWaypoint < _accuracyValue)
-        {
-            _canMove = false;
-            Invoke(nameof(CanMove), _pauseTime);
-            
-            _animator.StopWalkAnimation();
-            
-            _currentWaypoint = ++_currentWaypoint % _waypoints.WaypointsArray.Length;
-            
-            return;
-        }
-
-        MoveTo(_waypoints.WaypointsArray[_currentWaypoint].position, _moveSpeed);
-    }
-
-    private void MoveTo(Vector3 target, float speed)
-    {
         transform.position = Vector2.MoveTowards(transform.position,
             target,
             speed * Time.deltaTime);
     }
 
-    private void CanMove()
+    private void FlipTowardsTarget(Vector3 target)
     {
-        _enemySprite.flipX = !_enemySprite.flipX;
-        _canMove = true;
+        _direction = transform.position - target;
+
+        _flipper.Flip(_direction.x);
     }
 }

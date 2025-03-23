@@ -1,11 +1,15 @@
-using System.Linq;
 using UnityEngine;
 
 public class Waypoints : MonoBehaviour
 {
     [SerializeField] private Transform[] _waypointsArray;
-    
-    public Transform[] WaypointsArray => _waypointsArray.ToArray();
+
+    public int GetArrayLength => _waypointsArray.Length;
+
+    public Transform GetArrayElementByIndex(int index)
+    {
+        return _waypointsArray[index];
+    }
     
     [ContextMenu("GetWaypoints")]
     private void GetWaypoints()

@@ -1,42 +1,48 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyAnimationController))]
 public class EnemyAttacker : MonoBehaviour
 {
-    [SerializeField] private PlayerSearcher _playerSearcher;
     [SerializeField] private int _attackDamage = 20;
     [SerializeField] private float _attackDistance;
     [SerializeField] private float _attackDelay = 2f;
 
-    private bool _canAttack = true;
+    private WaitForSeconds _waitForSeconds;
     private List<Collider2D> _hit;
-    private EnemyAnimationController _animatior;
+    private bool _isAttackDelayOver;
+
+    public event Action OnAttacking;
 
     private void Awake()
     {
-        _animatior = GetComponent<EnemyAnimationController>();
+        _waitForSeconds = new WaitForSeconds(_attackDelay);
+        _isAttackDelayOver = true;
     }
 
-    private void Update()
+    public void Attack(Player player)
     {
-        if (_playerSearcher.FindedPlayer != null && Vector2.Distance(_playerSearcher.FindedPlayer.transform.position, transform.position) <= _attackDistance)
-        {
-            Attack();
-        }
-    }
-
-    private void Attack()
-    {
-        if (_canAttack == false)
+        if (_isAttackDelayOver == false)
             return;
 
-        _canAttack = false;
-        Invoke(nameof(CanAttack), _attackDelay);
+        if (CheckAttackPossibility(player.transform.position))
+        {
+            OnAttacking?.Invoke();
+            player.TakeDamage(DealDamage());
+        }
 
-        _animatior.Attack();
+        StartCoroutine(WaitForNextAttack());
+    }
 
-        _playerSearcher.FindedPlayer.TakeDamage(DealDamage());
+    private bool CheckAttackPossibility(Vector3 target)
+    {
+        if (Vector2.Distance(target, transform.position) <= _attackDistance)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private int DealDamage()
@@ -44,8 +50,10 @@ public class EnemyAttacker : MonoBehaviour
         return _attackDamage;
     }
 
-    private void CanAttack()
+    private IEnumerator WaitForNextAttack()
     {
-        _canAttack = true;
+        _isAttackDelayOver = false;
+        yield return _waitForSeconds;
+        _isAttackDelayOver = true;
     }
 }

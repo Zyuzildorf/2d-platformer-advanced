@@ -19,6 +19,8 @@ GameObject:
   - component: {fileID: 1925156994135606087}
   - component: {fileID: 4903422058205892173}
   - component: {fileID: 9081338871624828943}
+  - component: {fileID: 1761242774769601784}
+  - component: {fileID: 7814983038196641937}
   m_Layer: 0
   m_Name: EnemyPig
   m_TagString: Untagged
@@ -138,7 +140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1ebdc7fbf61a24a98e6eea78e52c6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyMover: {fileID: 9169456129198333447}
 --- !u!114 &9169456129198333447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,12 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5934dda2273714d428b3addeeb6a44b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemySprite: {fileID: 7894082156809052842}
-  _playerSearcher: {fileID: 9081338871624828943}
-  _waypoints: {fileID: 0}
-  _pauseTime: 1
-  _moveSpeed: 2
-  _chaseSpeed: 4
 --- !u!58 &6742099907656054918
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -244,7 +239,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5429df6e3aa2e814f9219a1b18eaedea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerSearcher: {fileID: 9081338871624828943}
   _attackDamage: 20
   _attackDistance: 3
   _attackDelay: 2
@@ -261,8 +255,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _distanceRaycast: 9.6
-  _maxYDistance: 0.5
+  _maxYDistance: 3.5
   _lookAtTransform: {fileID: 0}
   _layerMask:
     serializedVersion: 2
     m_Bits: 192
+--- !u!114 &1761242774769601784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7940238398751313122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72d0fa79c69d49447aea552054e3ad2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _waypoints: {fileID: 0}
+  _pauseTime: 3
+  _accuracyValue: 0.1
+  _patrolMoveSpeed: 2
+--- !u!114 &7814983038196641937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7940238398751313122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f668cde973625d49990054a0fcac448, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _chaseMoveSpeed: 4

@@ -9,6 +9,7 @@ public class HeartSpawner : MonoBehaviour
     [SerializeField] private int _preferHearthAmount;
 
     private List<int> _randomSpawnpointsIndexes;
+    private Heart _newHeart;
     private int _randomSpawnpointIndex;
 
     private void Awake()
@@ -32,7 +33,9 @@ public class HeartSpawner : MonoBehaviour
 
         for (int i = 0; i < _randomSpawnpointsIndexes.Count; i++)
         {
-            Instantiate(_heartPrefab, _spawnpoints[_randomSpawnpointsIndexes[i]].position, Quaternion.identity);
+            _newHeart = Instantiate(_heartPrefab, _spawnpoints[_randomSpawnpointsIndexes[i]].position, Quaternion.identity);
+
+            _newHeart.OnCollected += DestroyHeart;
         }
     }
 
@@ -51,5 +54,12 @@ public class HeartSpawner : MonoBehaviour
                 --i;
             }
         }
+    }
+    
+    private void DestroyHeart(Heart heart)
+    {
+        Destroy(heart.gameObject);
+        
+        heart.OnCollected -= DestroyHeart;
     }
 }

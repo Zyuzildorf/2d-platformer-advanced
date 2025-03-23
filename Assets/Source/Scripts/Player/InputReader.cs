@@ -6,7 +6,7 @@ public class InputReader : MonoBehaviour
     
     public bool OnMouseButtonPressed { get; private set; }
     public bool OnSpacebarPressed { get; private set; }
-    public float MoveInput { get; private set; }
+    public float Direction { get; private set; }
     
     private void Update()
     {
@@ -29,7 +29,7 @@ public class InputReader : MonoBehaviour
 
     private void CheckKeyboardinput()
     {
-        MoveInput = Input.GetAxis(Horizontal);
+        Direction = Input.GetAxis(Horizontal);
     }
 
     private void CheckSpaceBarInput()

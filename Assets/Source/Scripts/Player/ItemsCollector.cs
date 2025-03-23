@@ -11,13 +11,13 @@ public class ItemsCollector : MonoBehaviour
         if (other.TryGetComponent(out Coin coin))
         {
             OnCoinCollected?.Invoke(coin.CoinValue);
-            Destroy(other.gameObject);
+            coin.CallEvent();
         }
 
         if (other.TryGetComponent(out Heart heart))
         {
             OnHearthCollected?.Invoke(heart.HealtAmount);
-            Destroy(other.gameObject);
+            heart.CallEvent();
         }
     }
 }
