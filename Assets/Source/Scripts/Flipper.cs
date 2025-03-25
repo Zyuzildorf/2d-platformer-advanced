@@ -20,7 +20,7 @@ public class Flipper : MonoBehaviour
     
     private void RotateIfNeeded(float angle, ref bool isRotated, ref bool isOppositeRotated)
     {
-        if (!isRotated)
+        if (isRotated == false)
         {
             transform.RotateAround(transform.position, Vector3.up, angle);
             isRotated = true;

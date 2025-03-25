@@ -1,37 +1,28 @@
 using UnityEngine;
 
-[RequireComponent(typeof(ItemsCollector))]
+[RequireComponent(typeof(ItemsCollector), typeof(InputReader),typeof(PlayerMover))]
+[RequireComponent(typeof(PlayerJumper), typeof(PlayerGroundDetector), typeof(PlayerAttacker))]
+[RequireComponent(typeof(PlayerAnimationsSetter), typeof(PlayerHealth),typeof(PlayerWallet))]
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int _health;
-
-    private int _money;
-    private int _maxHealth;
     private ItemsCollector _itemsCollector;
     private InputReader _inputReader;
+    private PlayerHealth _playerHealth;
+    private PlayerWallet _playerWallet;
     private PlayerMover _playerMover;
     private PlayerJumper _playerJumper;
     private PlayerGroundDetector _playerGroundDetector;
     private PlayerAttacker _playerAttacker;
     private PlayerAnimationsSetter _playerAnimationSetter;
-    
-    public void TakeDamage(int damage)
-    {
-        _health -= damage;
 
-        Debug.Log("Получено " + damage + "урона.\n Осталось: " + _health + " здоровья.");
-        
-        if (_health <= 0)
-        {
-            Die();
-        }
-    }
+    public PlayerHealth PlayerHealth => _playerHealth; 
     
     private void Awake()
     {
-        _maxHealth = _health;
         _itemsCollector = GetComponent<ItemsCollector>();
         _inputReader = GetComponent<InputReader>();
+        _playerHealth = GetComponent<PlayerHealth>();
+        _playerWallet = GetComponent<PlayerWallet>();
         _playerMover = GetComponent<PlayerMover>();
         _playerJumper = GetComponent<PlayerJumper>();
         _playerGroundDetector = GetComponent<PlayerGroundDetector>();
@@ -39,12 +30,10 @@ public class Player : MonoBehaviour
         _playerAttacker = GetComponent<PlayerAttacker>();
     }
     
-
     private void OnEnable()
     {
-        _itemsCollector.OnHearthCollected += HealthRecover;
-        _itemsCollector.OnCoinCollected += TakeCoin;
-        _playerAttacker.OnAttacking += _playerAnimationSetter.Attack;
+        _itemsCollector.ItemCollected += UseItem;
+        _playerAttacker.Attacking += _playerAnimationSetter.Attack;
     }
 
     private void Update()
@@ -59,12 +48,12 @@ public class Player : MonoBehaviour
             _playerAnimationSetter.StopRunAnimation();
         }
 
-        if (_inputReader.OnSpacebarPressed && _playerGroundDetector.IsGrounded)
+        if (_inputReader.IsSpacebarPressed && _playerGroundDetector.IsGrounded)
         {
             _playerJumper.Jump();
         }
 
-        if (_inputReader.OnMouseButtonPressed)
+        if (_inputReader.IsMouseButtonPressed)
         {
             _playerAttacker.Attack();
         }
@@ -72,32 +61,20 @@ public class Player : MonoBehaviour
 
     private void OnDisable()
     {
-        _itemsCollector.OnHearthCollected -= HealthRecover;
-        _itemsCollector.OnCoinCollected -= TakeCoin;
-        _playerAttacker.OnAttacking -= _playerAnimationSetter.Attack;
+        _itemsCollector.ItemCollected -= UseItem;
+        _playerAttacker.Attacking -= _playerAnimationSetter.Attack;
     }
 
-    private void HealthRecover(int health)
+    private void UseItem(Item item)
     {
-        _health += health;
-
-        if (_health > _maxHealth)
+        if (item.TryGetComponent(out Coin coin))
         {
-            _health = _maxHealth;
+            _playerWallet.TakeCoin(coin);
         }
-        
-        Debug.Log("Здоровье восстановлено.\nТекущее здоровье: " + _health);
-    }
 
-    private void TakeCoin(int coinValue)
-    {
-        _money += coinValue;
-        
-        Debug.Log("Денег в кошельке: " + _money);
-    }
-
-    private void Die()
-    {
-        Destroy(gameObject);
+        if (item.TryGetComponent(out Heart heart))
+        {
+            _playerHealth.HealthRecover(heart);
+        }
     }
 }

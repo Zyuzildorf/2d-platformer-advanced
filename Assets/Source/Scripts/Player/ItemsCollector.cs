@@ -3,21 +3,14 @@ using UnityEngine;
 
 public class ItemsCollector : MonoBehaviour
 {
-    public event Action<int> OnHearthCollected; 
-    public event Action<int> OnCoinCollected; 
+    public event Action<Item> ItemCollected; 
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent(out Coin coin))
+        if (other.TryGetComponent(out Item item))
         {
-            OnCoinCollected?.Invoke(coin.CoinValue);
-            coin.CallEvent();
-        }
-
-        if (other.TryGetComponent(out Heart heart))
-        {
-            OnHearthCollected?.Invoke(heart.HealtAmount);
-            heart.CallEvent();
+            ItemCollected?.Invoke(item);
+            item.CallEvent();
         }
     }
 }

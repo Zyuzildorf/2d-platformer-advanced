@@ -15,7 +15,7 @@ public class PlayerAttacker : MonoBehaviour
     private List<Collider2D> _hit;
     private bool _isAttackDelayOver;
 
-    public event Action OnAttacking;
+    public event Action Attacking;
     
     private void Awake()
     {
@@ -28,7 +28,7 @@ public class PlayerAttacker : MonoBehaviour
         if (_isAttackDelayOver == false)
             return;
 
-        OnAttacking?.Invoke();
+        Attacking?.Invoke();
         
         _hit = Physics2D.OverlapCircleAll(transform.position, _attackRange).ToList();
         _hitEnemies = new List<Enemy>();
@@ -43,7 +43,7 @@ public class PlayerAttacker : MonoBehaviour
 
         foreach (Enemy enemy in _hitEnemies)
         {
-            enemy.TakeDamage(DealDamage());
+            enemy.EnemyHealth.TakeDamage(DealDamage());
         }
 
         StartCoroutine(WaitForNextAttack());

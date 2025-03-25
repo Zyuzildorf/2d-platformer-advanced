@@ -3,44 +3,30 @@ using UnityEngine;
 public class InputReader : MonoBehaviour
 {
     private const string Horizontal = nameof(Horizontal);
-    
-    public bool OnMouseButtonPressed { get; private set; }
-    public bool OnSpacebarPressed { get; private set; }
+
+    public bool IsMouseButtonPressed { get; private set; }
+    public bool IsSpacebarPressed { get; private set; }
     public float Direction { get; private set; }
-    
+
     private void Update()
     {
-        CheckKeyboardinput();
-        CheckMouseInput();
-        CheckSpaceBarInput();
+        UpdateKeyboardInput();
+        UpdateMouseButtonInput();
+        UpdateSpaceBarInput();
     }
 
-    private void CheckMouseInput()
+    private void UpdateMouseButtonInput()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            OnMouseButtonPressed = true;
-        }
-        else
-        {
-            OnMouseButtonPressed = false;
-        }
+        IsMouseButtonPressed = Input.GetKeyDown(KeyCode.Mouse0);
     }
 
-    private void CheckKeyboardinput()
+    private void UpdateKeyboardInput()
     {
         Direction = Input.GetAxis(Horizontal);
     }
 
-    private void CheckSpaceBarInput()
+    private void UpdateSpaceBarInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            OnSpacebarPressed = true;
-        }
-        else
-        {
-            OnSpacebarPressed = false;
-        }
+        IsSpacebarPressed = Input.GetKeyDown(KeyCode.Space);
     }
 }

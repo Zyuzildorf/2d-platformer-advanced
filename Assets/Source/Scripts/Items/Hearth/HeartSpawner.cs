@@ -35,7 +35,7 @@ public class HeartSpawner : MonoBehaviour
         {
             _newHeart = Instantiate(_heartPrefab, _spawnpoints[_randomSpawnpointsIndexes[i]].position, Quaternion.identity);
 
-            _newHeart.OnCollected += DestroyHeart;
+            _newHeart.Collected += DestroyHeart;
         }
     }
 
@@ -56,10 +56,10 @@ public class HeartSpawner : MonoBehaviour
         }
     }
     
-    private void DestroyHeart(Heart heart)
+    private void DestroyHeart(Item heart)
     {
         Destroy(heart.gameObject);
         
-        heart.OnCollected -= DestroyHeart;
+        heart.Collected -= DestroyHeart;
     }
 }

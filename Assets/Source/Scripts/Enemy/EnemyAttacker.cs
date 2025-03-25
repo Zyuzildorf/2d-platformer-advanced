@@ -13,7 +13,7 @@ public class EnemyAttacker : MonoBehaviour
     private List<Collider2D> _hit;
     private bool _isAttackDelayOver;
 
-    public event Action OnAttacking;
+    public event Action Attacking;
 
     private void Awake()
     {
@@ -21,28 +21,23 @@ public class EnemyAttacker : MonoBehaviour
         _isAttackDelayOver = true;
     }
 
-    public void Attack(Player player)
+    public void Attack(PlayerHealth playerHealth)
     {
         if (_isAttackDelayOver == false)
             return;
 
-        if (CheckAttackPossibility(player.transform.position))
+        if (IsAttackPossibility(playerHealth.transform.position))
         {
-            OnAttacking?.Invoke();
-            player.TakeDamage(DealDamage());
+            Attacking?.Invoke();
+            playerHealth.TakeDamage(DealDamage());
         }
 
         StartCoroutine(WaitForNextAttack());
     }
 
-    private bool CheckAttackPossibility(Vector3 target)
+    private bool IsAttackPossibility(Vector3 target)
     {
-        if (Vector2.Distance(target, transform.position) <= _attackDistance)
-        {
-            return true;
-        }
-
-        return false;
+        return target.IsEnoughClose(transform.position, _attackDistance);
     }
 
     private int DealDamage()

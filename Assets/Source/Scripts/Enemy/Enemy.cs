@@ -1,42 +1,40 @@
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyPatroler), typeof(EnemyAnimationsSetter), typeof(PlayerSearcher))]
+[RequireComponent(typeof(EnemyPatroler), typeof(EnemyAnimationsSetter),typeof(EnemyHealth) )]
 [RequireComponent(typeof(EnemyChaser), typeof(EnemyAttacker))]
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private PlayerSearcher _playerSearcher;
     [SerializeField] private int _health;
 
-    private EnemyAnimationsSetter _enemyAnimationsSetter;
-    private EnemyPatroler _enemyPatrol;
-    private EnemyChaser _enemyChaser;
-    private EnemyAttacker _enemyAttacker;
-    private PlayerSearcher _playerSearcher;
     private bool _isPatrolling;
     private bool _isChasing;
+    private EnemyHealth _enemyHealth;
+    private EnemyChaser _enemyChaser;
+    private EnemyPatroler _enemyPatrol;
+    private EnemyAttacker _enemyAttacker;
+    private EnemyAnimationsSetter _enemyAnimationsSetter;
 
+    public EnemyHealth EnemyHealth => _enemyHealth;
+    
     private void Awake()
     {
-        _enemyAnimationsSetter = GetComponent<EnemyAnimationsSetter>();
-        _enemyPatrol = GetComponent<EnemyPatroler>();
+        _enemyHealth = GetComponent<EnemyHealth>();
         _enemyChaser = GetComponent<EnemyChaser>();
+        _enemyPatrol = GetComponent<EnemyPatroler>();
         _enemyAttacker = GetComponent<EnemyAttacker>();
         _playerSearcher = GetComponent<PlayerSearcher>();
+        _enemyAnimationsSetter = GetComponent<EnemyAnimationsSetter>();
     }
 
     private void OnEnable()
     {
-        _enemyAttacker.OnAttacking += _enemyAnimationsSetter.Attack;
-    }
-
-    private void OnDisable()
-    {
-        _enemyAttacker.OnAttacking -= _enemyAnimationsSetter.Attack;
+        _enemyAttacker.Attacking += _enemyAnimationsSetter.Attack;
+        _enemyHealth.DamageTaken += _enemyAnimationsSetter.GetHit;
     }
 
     private void Update()
     {
-        _playerSearcher.FindPlayer();
-
         if (_playerSearcher.FindedPlayer == null)
         {
             _enemyAnimationsSetter.StopChaseAnimation();
@@ -59,24 +57,13 @@ public class Enemy : MonoBehaviour
 
             _enemyChaser.Chase(_playerSearcher.FindedPlayer.transform.position);
 
-            _enemyAttacker.Attack(_playerSearcher.FindedPlayer);
+            _enemyAttacker.Attack(_playerSearcher.FindedPlayer.PlayerHealth);
         }
     }
-
-    public void TakeDamage(int damage)
+    
+    private void OnDisable()
     {
-        _enemyAnimationsSetter.GetHit();
-
-        _health -= damage;
-
-        if (_health <= 0)
-        {
-            Die();
-        }
-    }
-
-    private void Die()
-    {
-        Destroy(gameObject);
+        _enemyAttacker.Attacking -= _enemyAnimationsSetter.Attack;
+        _enemyHealth.DamageTaken -= _enemyAnimationsSetter.GetHit;
     }
 }
