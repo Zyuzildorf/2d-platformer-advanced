@@ -8,15 +8,15 @@ public class PlayerMover : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private Flipper _flipper;
     
-    public void Move(float direction)
-    {
-        _flipper.Flip(direction);
-        _rigidbody.velocity = new Vector2(direction * _moveSpeed, _rigidbody.velocity.y);
-    }
-
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _flipper = GetComponent<Flipper>();
+    }
+    
+    public void Move(float direction)
+    {
+        _flipper.Flip(direction);
+        _rigidbody.velocity = new Vector2(direction * _moveSpeed, _rigidbody.velocity.y);
     }
 }

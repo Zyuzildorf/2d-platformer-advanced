@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(ItemsCollector), typeof(InputReader),typeof(PlayerMover))]
 [RequireComponent(typeof(PlayerJumper), typeof(PlayerGroundDetector), typeof(PlayerAttacker))]
-[RequireComponent(typeof(PlayerAnimationsSetter), typeof(PlayerHealth),typeof(PlayerWallet))]
+[RequireComponent(typeof(PlayerAnimator), typeof(PlayerHealth),typeof(PlayerWallet))]
 public class Player : MonoBehaviour
 {
     private ItemsCollector _itemsCollector;
@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     private PlayerJumper _playerJumper;
     private PlayerGroundDetector _playerGroundDetector;
     private PlayerAttacker _playerAttacker;
-    private PlayerAnimationsSetter _playerAnimationSetter;
+    private PlayerAnimator _playerAnimationSetter;
 
     public PlayerHealth PlayerHealth => _playerHealth; 
     
@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
         _playerMover = GetComponent<PlayerMover>();
         _playerJumper = GetComponent<PlayerJumper>();
         _playerGroundDetector = GetComponent<PlayerGroundDetector>();
-        _playerAnimationSetter = GetComponent<PlayerAnimationsSetter>();
+        _playerAnimationSetter = GetComponent<PlayerAnimator>();
         _playerAttacker = GetComponent<PlayerAttacker>();
     }
     
@@ -76,5 +76,10 @@ public class Player : MonoBehaviour
         {
             _playerHealth.HealthRecover(heart);
         }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }

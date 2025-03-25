@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour
     {
         _enemyAttacker.Attacking += _enemyAnimationsSetter.Attack;
         _enemyHealth.DamageTaken += _enemyAnimationsSetter.GetHit;
+        _enemyHealth.RanOutOfHealth += Die;
     }
 
     private void Update()
@@ -65,5 +66,11 @@ public class Enemy : MonoBehaviour
     {
         _enemyAttacker.Attacking -= _enemyAnimationsSetter.Attack;
         _enemyHealth.DamageTaken -= _enemyAnimationsSetter.GetHit;
+        _enemyHealth.RanOutOfHealth -= Die;
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }

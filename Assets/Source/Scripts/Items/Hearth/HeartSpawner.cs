@@ -51,7 +51,7 @@ public class HeartSpawner : MonoBehaviour
             }
             else
             {
-                --i;
+                ++_preferHearthAmount;
             }
         }
     }
