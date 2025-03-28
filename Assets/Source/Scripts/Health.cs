@@ -7,7 +7,8 @@ public class Health : MonoBehaviour
     
     protected int _maxHealth;
 
-    public event Action RanOutOfHealth;
+    public event Action Defeated;
+    public event Action DamageTaken;
     
     private void Awake()
     {
@@ -21,11 +22,28 @@ public class Health : MonoBehaviour
             return;
         }
         
+        DamageTaken?.Invoke();
+        
         _health -= damage;
         
         if (_health <= 0)
         {
-            RanOutOfHealth?.Invoke();
+            Defeated?.Invoke();
+        }
+    }
+    
+    public void HealthRecover(Heart heart)
+    {
+        if (heart.HealtAmount < 0)
+        {
+            return;
+        }
+        
+        _health += heart.HealtAmount;
+
+        if (_health > _maxHealth)
+        {
+            _health = _maxHealth;
         }
     }
 }

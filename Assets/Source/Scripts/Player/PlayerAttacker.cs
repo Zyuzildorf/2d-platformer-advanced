@@ -43,15 +43,10 @@ public class PlayerAttacker : MonoBehaviour
 
         foreach (Enemy enemy in _hitEnemies)
         {
-            enemy.EnemyHealth.TakeDamage(DealDamage());
+            enemy.Health.TakeDamage(_attackDamage);
         }
 
         StartCoroutine(WaitForNextAttack());
-    }
-
-    private int DealDamage()
-    {
-        return _attackDamage;
     }
     
     private IEnumerator WaitForNextAttack()

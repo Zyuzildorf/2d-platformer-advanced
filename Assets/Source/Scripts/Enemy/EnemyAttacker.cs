@@ -21,7 +21,7 @@ public class EnemyAttacker : MonoBehaviour
         _isAttackDelayOver = true;
     }
 
-    public void Attack(PlayerHealth playerHealth)
+    public void Attack(Health playerHealth)
     {
         if (_isAttackDelayOver == false)
             return;
@@ -29,7 +29,7 @@ public class EnemyAttacker : MonoBehaviour
         if (IsAttackPossibility(playerHealth.transform.position))
         {
             Attacking?.Invoke();
-            playerHealth.TakeDamage(DealDamage());
+            playerHealth.TakeDamage(_attackDamage);
         }
 
         StartCoroutine(WaitForNextAttack());
@@ -38,11 +38,6 @@ public class EnemyAttacker : MonoBehaviour
     private bool IsAttackPossibility(Vector3 target)
     {
         return target.IsEnoughClose(transform.position, _attackDistance);
-    }
-
-    private int DealDamage()
-    {
-        return _attackDamage;
     }
 
     private IEnumerator WaitForNextAttack()

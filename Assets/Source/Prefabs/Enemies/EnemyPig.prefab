@@ -102,7 +102,6 @@ GameObject:
   - component: {fileID: 7894082156809052842}
   - component: {fileID: 6624603282310038679}
   - component: {fileID: 9024336647950147202}
-  - component: {fileID: -1323836514230042023}
   - component: {fileID: 3260186444769196659}
   - component: {fileID: 9169456129198333447}
   - component: {fileID: 6742099907656054918}
@@ -112,6 +111,7 @@ GameObject:
   - component: {fileID: 9081338871624828943}
   - component: {fileID: 1761242774769601784}
   - component: {fileID: 7814983038196641937}
+  - component: {fileID: 8182344473847801413}
   m_Layer: 0
   m_Name: EnemyPig
   m_TagString: Untagged
@@ -220,19 +220,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c986d8a9928a8c042bea96416635ff10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-1323836514230042023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7940238398751313122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b002af94300bbf346934d3023f754350, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _health: 100
 --- !u!114 &3260186444769196659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,7 +319,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerSearcher: {fileID: 5567932395034049453}
-  _health: 100
 --- !u!114 &4903422058205892173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,3 +375,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chaseMoveSpeed: 4
+--- !u!114 &8182344473847801413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7940238398751313122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b264d8fa373634a89f20eb6553462f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 100

@@ -2,12 +2,12 @@ using UnityEngine;
 
 [RequireComponent(typeof(ItemsCollector), typeof(InputReader),typeof(PlayerMover))]
 [RequireComponent(typeof(PlayerJumper), typeof(PlayerGroundDetector), typeof(PlayerAttacker))]
-[RequireComponent(typeof(PlayerAnimator), typeof(PlayerHealth),typeof(PlayerWallet))]
+[RequireComponent(typeof(PlayerAnimator), typeof(Health),typeof(PlayerWallet))]
 public class Player : MonoBehaviour
 {
     private ItemsCollector _itemsCollector;
     private InputReader _inputReader;
-    private PlayerHealth _playerHealth;
+    private Health _health;
     private PlayerWallet _playerWallet;
     private PlayerMover _playerMover;
     private PlayerJumper _playerJumper;
@@ -15,13 +15,13 @@ public class Player : MonoBehaviour
     private PlayerAttacker _playerAttacker;
     private PlayerAnimator _playerAnimationSetter;
 
-    public PlayerHealth PlayerHealth => _playerHealth; 
+    public Health Health => _health; 
     
     private void Awake()
     {
         _itemsCollector = GetComponent<ItemsCollector>();
         _inputReader = GetComponent<InputReader>();
-        _playerHealth = GetComponent<PlayerHealth>();
+        _health = GetComponent<Health>();
         _playerWallet = GetComponent<PlayerWallet>();
         _playerMover = GetComponent<PlayerMover>();
         _playerJumper = GetComponent<PlayerJumper>();
@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         _itemsCollector.ItemCollected += UseItem;
+        _health.Defeated += Die;
         _playerAttacker.Attacking += _playerAnimationSetter.Attack;
     }
 
@@ -62,6 +63,7 @@ public class Player : MonoBehaviour
     private void OnDisable()
     {
         _itemsCollector.ItemCollected -= UseItem;
+        _health.Defeated -= Die;
         _playerAttacker.Attacking -= _playerAnimationSetter.Attack;
     }
 
@@ -74,7 +76,7 @@ public class Player : MonoBehaviour
 
         if (item.TryGetComponent(out Heart heart))
         {
-            _playerHealth.HealthRecover(heart);
+            _health.HealthRecover(heart);
         }
     }
 
